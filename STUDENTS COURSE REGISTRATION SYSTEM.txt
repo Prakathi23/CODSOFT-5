@@ -1,0 +1,169 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Contact {
+    private String name;
+    private String phoneNumber;
+    private String email;
+    private String address;
+
+    public Contact(String name, String phoneNumber, String email, String address) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+}
+
+class ContactBook {
+    private ArrayList<Contact> contacts;
+
+    public ContactBook() {
+        this.contacts = new ArrayList<>();
+    }
+
+    public void addContact(Contact contact) {
+        contacts.add(contact);
+        System.out.println("Contact added successfully.");
+    }
+
+    public void viewContacts() {
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts found.");
+        } else {
+            System.out.println("Contact List:");
+            for (int i = 0; i < contacts.size(); i++) {
+                Contact contact = contacts.get(i);
+                System.out.println((i + 1) + ". Name: " + contact.getName() + ", Phone: " + contact.getPhoneNumber());
+            }
+        }
+    }
+
+    public void searchContact(String searchQuery) {
+        ArrayList<Contact> foundContacts = new ArrayList<>();
+        for (Contact contact : contacts) {
+            if (contact.getName().toLowerCase().contains(searchQuery.toLowerCase()) ||
+                contact.getPhoneNumber().contains(searchQuery)) {
+                foundContacts.add(contact);
+            }
+        }
+        if (foundContacts.isEmpty()) {
+            System.out.println("No contacts found.");
+        } else {
+            System.out.println("Found contacts:");
+            for (Contact contact : foundContacts) {
+                displayContact(contact);
+            }
+        }
+    }
+
+    public void updateContact(int index, Contact updatedContact) {
+        if (index >= 0 && index < contacts.size()) {
+            contacts.set(index, updatedContact);
+            System.out.println("Contact updated successfully.");
+        } else {
+            System.out.println("Invalid index.");
+        }
+    }
+
+    public void deleteContact(int index) {
+        if (index >= 0 && index < contacts.size()) {
+            contacts.remove(index);
+            System.out.println("Contact deleted successfully.");
+        } else {
+            System.out.println("Invalid index.");
+        }
+    }
+
+    private void displayContact(Contact contact) {
+        System.out.println("Name: " + contact.getName());
+        System.out.println("Phone: " + contact.getPhoneNumber());
+        System.out.println("Email: " + contact.getEmail());
+        System.out.println("Address: " + contact.getAddress());
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ContactBook contactBook = new ContactBook();
+
+        while (true) {
+            System.out.println("\nContact Management System");
+            System.out.println("1. Add Contact");
+            System.out.println("2. View Contact List");
+            System.out.println("3. Search Contact");
+            System.out.println("4. Update Contact");
+            System.out.println("5. Delete Contact");
+            System.out.println("6. Exit");
+
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter phone number: ");
+                    String phoneNumber = scanner.nextLine();
+                    System.out.print("Enter email: ");
+                    String email = scanner.nextLine();
+                    System.out.print("Enter address: ");
+                    String address = scanner.nextLine();
+                    contactBook.addContact(new Contact(name, phoneNumber, email, address));
+                    break;
+                case 2:
+                    contactBook.viewContacts();
+                    break;
+                case 3:
+                    System.out.print("Enter name or phone number to search: ");
+                    String searchQuery = scanner.nextLine();
+                    contactBook.searchContact(searchQuery);
+                    break;
+                case 4:
+                    System.out.print("Enter the index of contact to update: ");
+                    int updateIndex = scanner.nextInt();
+                    scanner.nextLine();  // Consume newline
+                    System.out.print("Enter name: ");
+                    name = scanner.nextLine();
+                    System.out.print("Enter phone number: ");
+                    phoneNumber = scanner.nextLine();
+                    System.out.print("Enter email: ");
+                    email = scanner.nextLine();
+                    System.out.print("Enter address: ");
+                    address = scanner.nextLine();
+                    contactBook.updateContact(updateIndex - 1, new Contact(name, phoneNumber, email, address));
+                    break;
+                case 5:
+                    System.out.print("Enter the index of contact to delete: ");
+                    int deleteIndex = scanner.nextInt();
+                    scanner.nextLine();  // Consume newline
+                    contactBook.deleteContact(deleteIndex - 1);
+                    break;
+                case 6:
+                    System.out.println("Exiting program.");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please choose again.");
+            }
+        }
+    }
+}
